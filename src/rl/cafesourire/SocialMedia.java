@@ -16,12 +16,14 @@ public class SocialMedia {
 	
 	private Twitter twitter; 
 	private static SocialMedia instance = null;
-	private static String OAuthConsumerKey;
-	private static String OAuthConsumerSecret;
-	private static String OAuthAccessToken;
-	private static String OAuthAccessTokenSecret;
+	private static String OAuthConsumerKey = null;
+	private static String OAuthConsumerSecret = null;
+	private static String OAuthAccessToken = null;
+	private static String OAuthAccessTokenSecret = null;
 	
 	InputStream inputStream;
+	
+	boolean instantised = false;
 	
 	protected SocialMedia(){
 		
@@ -37,15 +39,19 @@ public class SocialMedia {
 	//Twitter update with message/photo
 	public void sendTwitterImage(String imgPath, String tMessage){
 		//read twitter properties only once when properties have not yet been read
-		if (OAuthConsumerKey == null){
+		if (instantised == false){
+			System.out.println("enter");
 			try {
 				readTwitterProperties();
+				instantised = true;
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 		setupTwitter();
+		
+		System.out.println(OAuthConsumerKey);
 		
 		//String tMessage="Free coffee for this smiling person!";
 		File file = new File(imgPath);
@@ -76,7 +82,7 @@ public class SocialMedia {
 	private void readTwitterProperties() throws IOException{
 		try{
 			Properties prop = new Properties();
-			String propFileName = "twitter.properties";
+			String propFileName = "resources/twitter.properties";
 			
 			inputStream = getClass().getClassLoader().getResourceAsStream("");
 			 
@@ -92,6 +98,8 @@ public class SocialMedia {
 			OAuthAccessToken = 		prop.getProperty(OAuthAccessToken);
 			OAuthAccessTokenSecret = prop.getProperty(OAuthAccessTokenSecret);
 
+			System.out.println("qsdqsdqsd");
+			
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);
 		} finally {

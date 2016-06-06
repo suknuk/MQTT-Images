@@ -211,7 +211,7 @@ public class MainCoffeeClass implements MqttCallback{
 				//ImageCreator.createPictureFromByteFile(imgName, imgName, height, width, BufferedImage.TYPE_INT_BGR);
 				
 				//send the image with a message to twitter
-				//socialMedia.sendTwitterImage(imgName, "Free coffee for this smiling person!");
+				socialMedia.sendTwitterImage(imgName, "Free coffee for this smiling person!");
 			}
 			//received a other message
 		} else {
