@@ -6,6 +6,7 @@ package rl.cafesourire;
  * 
  */
 
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -13,6 +14,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Arrays;
+import java.util.Base64;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -23,7 +26,8 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+//import com.sun.org.apache.xml.internal.security.Init;
+//import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 import java.awt.image.BufferedImage;
 
@@ -32,7 +36,7 @@ public class MainCoffeeClass implements MqttCallback{
 	static MqttClient mqtt_client;
 	static MqttConnectOptions connOpt;
 	
-	private static String mqtt_server_ip = "10.42.0.16";
+	private static String mqtt_server_ip = "localhost";
 	
 	private static int 	  mqtt_server_port = 1883;
 	private static String mqtt_broker = "tcp://" + mqtt_server_ip + ":" + mqtt_server_port;
@@ -41,14 +45,14 @@ public class MainCoffeeClass implements MqttCallback{
 	private static String mqtt_published_topic = "debug";
 	private static int mqtt_qos = 2;
 	
-	private static int height = 480;
-	private static int width = 320;
+	private static int height = 512;
+	private static int width = 512;
 	
 	//private static Twitter twitter;
 	private static SocialMedia socialMedia;
 	
 	//usage for example
-	boolean ot = false;
+	boolean ot = true;
 	
 	
 	//TODO: take server args from input
@@ -58,17 +62,17 @@ public class MainCoffeeClass implements MqttCallback{
 		mcc.setupMQTTClient();
 		MainCoffeeClass.socialMedia = SocialMedia.GetSocialMedia();
 
-		
 		//wait for messages
 		while(true){
 			
 			try {
-				Thread.sleep(5000);
+				Thread.sleep(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 
-			//ic.sendMessage("Alive", "debug");
+			//mcc.sendMessage("Alive", "debug");
+			mcc.sendExample(mcc);
 		}
 	}
 
@@ -76,13 +80,17 @@ public class MainCoffeeClass implements MqttCallback{
 		//example of sending a image in a byte file
 		if (ot){
 			ot = false;
-			Path path = Paths.get("imagedata");
+			//Path path = Paths.get("imagedata");
 			try {
-				byte[] data = Files.readAllBytes(path);
+				File fi = new File("Lenna.jpg");
+				byte[] fileContent = Files.readAllBytes(fi.toPath());
+				
+				//byte[] data = Files.readAllBytes(path);
 				//"ISO-8859-1" to keep every byte
-				String sendimg = new String(data, "ISO-8859-1");
-				System.out.println("length of image :" + sendimg.length() + " length of bytearray: " + data.length);
-				mcc.sendMessage(sendimg,"sourire/cam");
+				//String sendimg = new String(fileContent, "ISO-8859-1");
+				String sendimg = Base64.getEncoder().encodeToString(fileContent);
+				System.out.println("length of image :" + sendimg.length() + " length of bytearray: " + fileContent.length);
+				mcc.sendMessage(sendimg,"sourire");
 			} catch (IOException e) {
 				e.printStackTrace();
 				System.out.println(e.toString());
@@ -110,7 +118,7 @@ public class MainCoffeeClass implements MqttCallback{
 			mqtt_client = new MqttClient(mqtt_broker, clientID);
 			mqtt_client.setCallback(this);
 			mqtt_client.connect(connOpt);
-			mqtt_client.setTimeToWait(10000);
+			mqtt_client.setTimeToWait(1000);
 		} catch (MqttException e) {
 			e.printStackTrace();
 			System.exit(-1);
@@ -151,13 +159,13 @@ public class MainCoffeeClass implements MqttCallback{
 				
 	@Override
 	public void connectionLost(Throwable arg0) {
-		System.out.println("Connection lost!");	
+		System.out.println("Connection lost!");
+		System.out.println(arg0.toString());
 	}
 
 	@Override
 	public void deliveryComplete(IMqttDeliveryToken arg0) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	/*callBack function - this function is called when a message from
@@ -183,25 +191,27 @@ public class MainCoffeeClass implements MqttCallback{
 				System.out.println("| Topic:" + topic.toString());
 				System.out.println("-------------------------------------------------");
 				
-				
-				//decoded the encoded base64 string	
-				byte[] a64 = Base64.decode(theMessage);
+				//decode the base64 encoded string	
+				byte[] a = theMessage.getBytes("ISO-8859-1");
+				System.out.println(theMessage.length() + " " + a.length);
+				byte[] a64 = Base64.getDecoder().decode(a);
+				//byte[] a64 = Base64.getDecoder().decode(theMessage);
 				System.out.println("string length : " + theMessage.length() + "image data length " + a64.length);
 				
 				//unique image name -> current Date in string without spaces
 				String imgName = "images/" + getWritableDate();
 				
 				//save data to byte file
-				System.out.println("Trying to saving image data to " + imgName);
+				System.out.println("Trying to saving byte data to " + imgName);
 				FileOutputStream out = new FileOutputStream(imgName);
 				out.write(a64);
 				out.close();
-				System.out.println("Image saved to data file");
+				System.out.println("Byte data saved");
 				
-				ImageCreator.createPictureFromString(imgName, imgName, height, width, BufferedImage.TYPE_INT_BGR);
+				//ImageCreator.createPictureFromByteFile(imgName, imgName, height, width, BufferedImage.TYPE_INT_BGR);
 				
 				//send the image with a message to twitter
-				socialMedia.sendTwitterImage(imgName, "Free coffee for this smiling person!");
+				//socialMedia.sendTwitterImage(imgName, "Free coffee for this smiling person!");
 			}
 			//received a other message
 		} else {

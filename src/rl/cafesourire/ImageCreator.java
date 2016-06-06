@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 
 //creates an image from a bit file
 abstract public class ImageCreator {
-	public static void createPictureFromString(String pathBitFile,String imgName,int height, int width, int imageType){
+	public static void createPictureFromByteFile(String pathBitFile,String imgName,int height, int width, int imageType){
 		Path path = Paths.get(pathBitFile);
 		try {
 			//image comes in type BGR
