@@ -17,6 +17,9 @@ import java.util.Date;
 import java.util.Arrays;
 import java.util.Base64;
 
+import org.apache.commons.cli.BasicParser;
+import org.apache.commons.cli.CommandLineParser;
+import org.apache.commons.cli.ParseException;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -37,7 +40,6 @@ public class MainCoffeeClass implements MqttCallback{
 	static MqttConnectOptions connOpt;
 	
 	private static String mqtt_server_ip = "localhost";
-	
 	private static int 	  mqtt_server_port = 1883;
 	private static String mqtt_broker = "tcp://" + mqtt_server_ip + ":" + mqtt_server_port;
 	private static String mqtt_clientID = "ImageReceiver";
@@ -54,10 +56,16 @@ public class MainCoffeeClass implements MqttCallback{
 	//usage for example
 	boolean ot = true;
 	
+	//CommandLineParser parser = new BasicParser();
 	
 	//TODO: take server args from input
 	public static void main(String[] args) {
 		
+		//String[] a = {"--help"};
+		new CommandLineValues(args).parse(mqtt_server_ip,mqtt_server_port,height,width);
+		
+		
+		/*
 		MainCoffeeClass mcc = new MainCoffeeClass();
 		mcc.setupMQTTClient();
 		MainCoffeeClass.socialMedia = SocialMedia.GetSocialMedia();
@@ -73,7 +81,7 @@ public class MainCoffeeClass implements MqttCallback{
 
 			//mcc.sendMessage("Alive", "debug");
 			//mcc.sendExample(mcc);
-		}
+		}*/
 	}
 
 	//example of sending a image in a byte file
