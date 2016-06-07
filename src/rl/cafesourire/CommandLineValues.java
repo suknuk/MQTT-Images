@@ -1,9 +1,6 @@
 //inspiration from: http://www.thinkplexx.com/blog/simple-apache-commons-cli-example-java-command-line-arguments-parsing
 package rl.cafesourire;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -11,6 +8,7 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
+@SuppressWarnings("deprecation")
 public class CommandLineValues {
 	private String[] args = null;
 	private Options options = new Options();
@@ -24,11 +22,11 @@ public class CommandLineValues {
 		options.addOption("p", "port",true, "Set MQTT server port");
 		options.addOption("height",true, "Set height of the receiving images");
 		options.addOption("width",true, "Set width of the receiving images");
+		options.addOption("t", "twitter", false, "Sets flag to use/not use social media");
 
 	}
 
-	public void parse(String mqtt_server_ip, int mqtt_server_port, int img_height, int img_width) {
-		@SuppressWarnings("deprecation")
+	public void parse(String mqtt_server_ip, int mqtt_server_port, int img_height, int img_width, boolean activeTwitter) {
 		CommandLineParser parser = new BasicParser();
 
 		CommandLine cmd = null;
@@ -39,7 +37,9 @@ public class CommandLineValues {
 			boolean port = cmd.hasOption("port");
 			boolean height = cmd.hasOption("height");
 			boolean width = cmd.hasOption("width");
+			activeTwitter = cmd.hasOption("twitter");
 			
+			//help flag
 			if (cmd.hasOption("h")){
 				help();
 			}
@@ -83,10 +83,8 @@ public class CommandLineValues {
 						" and default width of: " + img_width);
 			}
 			
-			/*else {
-				//log.log(Level.SEVERE, "Missing v option");
-				help();
-			}*/
+			//twitter flag
+			System.out.println("Using Twitter : " + activeTwitter);
 
 		} catch (ParseException e) {
 			System.out.println("Failed to parse comand line properties " + e.toString());

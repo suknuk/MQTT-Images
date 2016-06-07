@@ -6,7 +6,6 @@ package rl.cafesourire;
  * 
  */
 
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -14,12 +13,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Arrays;
 import java.util.Base64;
 
-import org.apache.commons.cli.BasicParser;
-import org.apache.commons.cli.CommandLineParser;
-import org.apache.commons.cli.ParseException;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttClient;
@@ -28,9 +23,6 @@ import org.eclipse.paho.client.mqttv3.MqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.MqttTopic;
-
-//import com.sun.org.apache.xml.internal.security.Init;
-//import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 import java.awt.image.BufferedImage;
 
@@ -52,25 +44,25 @@ public class MainCoffeeClass implements MqttCallback{
 	
 	//private static Twitter twitter;
 	private static SocialMedia socialMedia;
+	private static boolean activeTwitter = false;
 	
 	//usage for example
 	boolean ot = true;
+
 	
-	//CommandLineParser parser = new BasicParser();
-	
-	//TODO: take server args from input
 	public static void main(String[] args) {
 		
-		//String[] a = {"--help"};
-		new CommandLineValues(args).parse(mqtt_server_ip,mqtt_server_port,height,width);
+		//handling arguments
+		new CommandLineValues(args).parse(mqtt_server_ip,mqtt_server_port,height,width,activeTwitter);
 		
 		
-		/*
 		MainCoffeeClass mcc = new MainCoffeeClass();
 		mcc.setupMQTTClient();
-		MainCoffeeClass.socialMedia = SocialMedia.GetSocialMedia();
-
-		//wait for messages
+		if (activeTwitter) {
+			MainCoffeeClass.socialMedia = SocialMedia.GetSocialMedia();
+		}
+		
+		//waiting for incoming MQTT messages
 		while(true){
 			
 			try {
@@ -81,7 +73,7 @@ public class MainCoffeeClass implements MqttCallback{
 
 			//mcc.sendMessage("Alive", "debug");
 			//mcc.sendExample(mcc);
-		}*/
+		}
 	}
 
 	//example of sending a image in a byte file
@@ -216,8 +208,10 @@ public class MainCoffeeClass implements MqttCallback{
 				
 				ImageCreator.createPictureFromByteFile(imgName, imgName, height, width, BufferedImage.TYPE_INT_BGR);
 				
-				//send the image with a message to twitter
-				socialMedia.sendTwitterImage(imgName+".jpg", "Free coffee for this smiling person!");
+				//send the image with a message to twitter, if twitter is set to true
+				if (activeTwitter) {
+					socialMedia.sendTwitterImage(imgName+".jpg", "Free coffee for this smiling person!");
+				}
 			}
 			//received a other message
 		} else {
