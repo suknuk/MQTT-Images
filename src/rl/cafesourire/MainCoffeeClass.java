@@ -37,8 +37,6 @@ public class MainCoffeeClass implements MqttCallback{
 	private static String mqtt_broker = "tcp://" + mqtt_server_ip + ":" + mqtt_server_port;
 	private static String mqtt_clientID = "ImageReceiver";
 	private static String mqtt_subscribed_topic = "sourire";
-	private static String mqtt_published_topic = "debug";
-	private static int mqtt_qos = 2;
 	
 	//measurements of the incoming pictures
 	private static int height = 512;
@@ -56,7 +54,7 @@ public class MainCoffeeClass implements MqttCallback{
 	private static ArrayList<Object> bypass;
 	
 	//usage for example
-	boolean ot = true;
+	private static boolean sendExampleImage = false;
 
 	public static void main(String[] args) {
 		MainCoffeeClass mcc = new MainCoffeeClass();
@@ -91,7 +89,8 @@ public class MainCoffeeClass implements MqttCallback{
 		 * In this order:
 		 * mqtt_server_ip,mqtt_server_port,
 		 * height,width,
-		 * activeTwitter,automaticTwitterUpdates
+		 * activeTwitter,automaticTwitterUpdates,
+		 * sendExampleImage
 		 */
 		bypass = new ArrayList<Object>();
 		bypass.add(mqtt_server_ip);
@@ -100,6 +99,7 @@ public class MainCoffeeClass implements MqttCallback{
 		bypass.add(width);
 		bypass.add(activeTwitter);
 		bypass.add(automaticTwitterUpdates);
+		bypass.add(sendExampleImage);
 	}
 	
 	public void retrieveBypassList(){
@@ -112,12 +112,13 @@ public class MainCoffeeClass implements MqttCallback{
 		width = (int) bypass.get(3);
 		activeTwitter = (boolean) bypass.get(4);
 		automaticTwitterUpdates = (boolean) bypass.get(5);
+		sendExampleImage = (boolean) bypass.get(6);
 	}
 	
 	//example of sending a image in a byte file
 	public void sendExample(MainCoffeeClass mcc){
-		if (ot){
-			ot = false;
+		if (sendExampleImage){
+			sendExampleImage = false;
 			Path path = Paths.get("imagedata");
 			try {
 				byte[] data = Files.readAllBytes(path);

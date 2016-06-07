@@ -25,7 +25,10 @@ public class CommandLineValues {
 		options.addOption("height",true, "Set height of the receiving images");
 		options.addOption("width",true, "Set width of the receiving images");
 		options.addOption("t", "twitter", false, "Sets flag to use/not use social media");
-		options.addOption("at","automaticTwitter",false,"Sets flag for automatic status updates on Twitter, or to wait for a user command");
+		options.addOption("at","automaticTwitter",false,"Sets flag for automatic status updates "
+				+ "on Twitter, or to wait for a user command");
+		options.addOption("ex", "exampleImage", false, "Sets the flag for one sample image to be "
+				+ "send to see if the program is working");
 
 	}
 
@@ -40,6 +43,7 @@ public class CommandLineValues {
 		int img_width = (int) bypass.get(3);
 		boolean activeTwitter = (boolean) bypass.get(4);
 		boolean automaticTwitterUpdates = (boolean) bypass.get(5);
+		boolean sendExampleImage = (boolean) bypass.get(6);
 		
 		CommandLineParser parser = new BasicParser();
 
@@ -47,12 +51,14 @@ public class CommandLineValues {
 		try {
 			cmd = parser.parse(options, args);
 
+			//retrieving argument flags
 			boolean ip = cmd.hasOption("ip");
 			boolean port = cmd.hasOption("port");
 			boolean height = cmd.hasOption("height");
 			boolean width = cmd.hasOption("width");
 			activeTwitter = cmd.hasOption("twitter");
 			automaticTwitterUpdates = cmd.hasOption("automaticTwitter");
+			sendExampleImage = cmd.hasOption("exampleImage");
 			
 			//help flag
 			if (cmd.hasOption("h")){
@@ -105,6 +111,11 @@ public class CommandLineValues {
 			System.out.println("Updating status automatically on twitter: " + automaticTwitterUpdates + 
 					". Waiting for MQTT message to update on twitter: " + !automaticTwitterUpdates);
 			
+			if (sendExampleImage) {
+				System.out.println("exampleImage flag set to True. This will send one example image "
+						+ "at the beginning of the program to test the functionallity");
+			}
+			
 			//putting back the variables to bypass Call by Value
 			bypass.set(0, mqtt_server_ip);
 			bypass.set(1, mqtt_server_port);
@@ -112,6 +123,7 @@ public class CommandLineValues {
 			bypass.set(3, img_width);
 			bypass.set(4, activeTwitter);
 			bypass.set(5, automaticTwitterUpdates);
+			bypass.set(6, sendExampleImage);
 
 		} catch (ParseException e) {
 			System.out.println("Failed to parse comand line properties " + e.toString());
