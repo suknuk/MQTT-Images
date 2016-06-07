@@ -1,6 +1,7 @@
 package rl.cafesourire;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -40,13 +41,13 @@ public class SocialMedia {
 	public void sendTwitterImage(String imgPath, String tMessage){
 		//read twitter properties only once when properties have not yet been read
 		if (instantised == false){
-			System.out.println("enter");
 			try {
+				System.out.println("Trying to set Twitter properties");
 				readTwitterProperties();
 				instantised = true;
+				System.out.println("Twitter properties set");
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				System.out.println(e.toString());
 			}
 		}
 		setupTwitter();
@@ -62,8 +63,7 @@ public class SocialMedia {
 			twitter.updateStatus(status);
 			System.out.println("Successfully updated status and uploaded image to twitter");
 		} catch (TwitterException e) {
-			e.printStackTrace();
-			System.out.println("Failed to update status on twitter");
+			System.out.println("Failed to update status on twitter :" + e.toString());
 		}
 	}
 	
@@ -79,26 +79,25 @@ public class SocialMedia {
 	}
 	
 	//Reading and setting the twitter properties from a properties file
-	private void readTwitterProperties() throws IOException{
+	public void readTwitterProperties() throws IOException{
 		try{
 			Properties prop = new Properties();
+			//String propFileName = "twitter.properties";
+			//inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
 			String propFileName = "resources/twitter.properties";
+			inputStream = new FileInputStream(propFileName);
 			
-			inputStream = getClass().getClassLoader().getResourceAsStream("");
-			 
 			if (inputStream != null) {
 				prop.load(inputStream);
 			} else {
 				throw new FileNotFoundException("Property file '" + propFileName + "' not found in the classpath");
 			}
- 
+			
 			//get property values
-			OAuthConsumerKey = 		prop.getProperty(OAuthConsumerKey);
-			OAuthConsumerSecret = 	prop.getProperty(OAuthConsumerSecret);
-			OAuthAccessToken = 		prop.getProperty(OAuthAccessToken);
-			OAuthAccessTokenSecret = prop.getProperty(OAuthAccessTokenSecret);
-
-			System.out.println("qsdqsdqsd");
+			OAuthConsumerKey = 		prop.getProperty("OAuthConsumerKey");
+			OAuthConsumerSecret = 	prop.getProperty("OAuthConsumerSecret");
+			OAuthAccessToken = 		prop.getProperty("OAuthAccessToken");
+			OAuthAccessTokenSecret = prop.getProperty("OAuthAccessTokenSecret");
 			
 		} catch (Exception e) {
 			System.out.println("Exception: " + e);

@@ -32,7 +32,7 @@ abstract public class ImageCreator {
 				}
 			}
 			File outputFile = new File(imgName + ".jpg");
-			System.out.println("Trying to save image '" + imgName + "'");
+			System.out.println("Trying to save image '" + imgName + ".jpg'");
 			ImageIO.write(img, "jpg", outputFile);
 			System.out.println("Image '" + imgName + ".jpg' saved");
 		} catch (IOException e) {
