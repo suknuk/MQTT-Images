@@ -59,12 +59,14 @@ public class MainCoffeeClass implements MqttCallback{
 	boolean ot = true;
 
 	public static void main(String[] args) {
-		//setUpBypassList();
 		MainCoffeeClass mcc = new MainCoffeeClass();
 		mcc.setUpBypassList();
 		//handling arguments
 		CommandLineValues clv = new CommandLineValues(args);
 		clv.parse(bypass);
+		mcc.retrieveBypassList();
+		
+		System.out.println(mqtt_server_ip);
 
 		mcc.setupMQTTClient();
 		if (activeTwitter) {
@@ -100,18 +102,25 @@ public class MainCoffeeClass implements MqttCallback{
 		bypass.add(automaticTwitterUpdates);
 	}
 	
+	public void retrieveBypassList(){
+		/*
+		 * Retrieving the variables stored in the bypass List
+		 */
+		mqtt_server_ip = (String) bypass.get(0);
+		mqtt_server_port = (int) bypass.get(1);
+		height = (int) bypass.get(2);
+		width = (int) bypass.get(3);
+		activeTwitter = (boolean) bypass.get(4);
+		automaticTwitterUpdates = (boolean) bypass.get(5);
+	}
+	
 	//example of sending a image in a byte file
 	public void sendExample(MainCoffeeClass mcc){
 		if (ot){
 			ot = false;
 			Path path = Paths.get("imagedata");
 			try {
-				//File fi = new File("Lenna.jpg");
-				//byte[] fileContent = Files.readAllBytes(fi.toPath());
-				
 				byte[] data = Files.readAllBytes(path);
-				//"ISO-8859-1" to keep every byte
-				//String sendimg = new String(fileContent, "ISO-8859-1");
 				String sendimg = Base64.getEncoder().encodeToString(data);
 				System.out.println("length of image :" + sendimg.length() + " length of bytearray: " + data.length);
 				mcc.sendMessage(sendimg,"sourire");
