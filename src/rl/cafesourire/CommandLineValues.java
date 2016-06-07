@@ -1,6 +1,8 @@
 //inspiration from: http://www.thinkplexx.com/blog/simple-apache-commons-cli-example-java-command-line-arguments-parsing
 package rl.cafesourire;
 
+import java.util.ArrayList;
+
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -23,10 +25,22 @@ public class CommandLineValues {
 		options.addOption("height",true, "Set height of the receiving images");
 		options.addOption("width",true, "Set width of the receiving images");
 		options.addOption("t", "twitter", false, "Sets flag to use/not use social media");
+		options.addOption("at","automaticTwitter",false,"Sets flag for automatic status updates on Twitter, or to wait for a user command");
 
 	}
 
-	public void parse(String mqtt_server_ip, int mqtt_server_port, int img_height, int img_width, boolean activeTwitter) {
+	//public void parse(String mqtt_server_ip, int mqtt_server_port, int img_height, int img_width, 
+		//	boolean activeTwitter, boolean automaticTwitterUpdates) {
+	public void parse(ArrayList<Object> bypass){
+		
+		//making references
+		String mqtt_server_ip = (String) bypass.get(0);
+		int mqtt_server_port = (int) bypass.get(1);
+		int img_height = (int) bypass.get(2);
+		int img_width = (int) bypass.get(3);
+		boolean activeTwitter = (boolean) bypass.get(4);
+		boolean automaticTwitterUpdates = (boolean) bypass.get(5);
+		
 		CommandLineParser parser = new BasicParser();
 
 		CommandLine cmd = null;
@@ -38,6 +52,7 @@ public class CommandLineValues {
 			boolean height = cmd.hasOption("height");
 			boolean width = cmd.hasOption("width");
 			activeTwitter = cmd.hasOption("twitter");
+			automaticTwitterUpdates = cmd.hasOption("automaticTwitter");
 			
 			//help flag
 			if (cmd.hasOption("h")){
@@ -85,6 +100,18 @@ public class CommandLineValues {
 			
 			//twitter flag
 			System.out.println("Using Twitter : " + activeTwitter);
+			
+			//automatically updating on twitter or not
+			System.out.println("Updating status automatically on twitter: " + automaticTwitterUpdates + 
+					". Waiting for MQTT message to update on twitter: " + !automaticTwitterUpdates);
+			
+			//putting back the variables to bypass Call by Value
+			bypass.set(0, mqtt_server_ip);
+			bypass.set(1, mqtt_server_port);
+			bypass.set(2, img_height);
+			bypass.set(3, img_width);
+			bypass.set(4, activeTwitter);
+			bypass.set(5, automaticTwitterUpdates);
 
 		} catch (ParseException e) {
 			System.out.println("Failed to parse comand line properties " + e.toString());

@@ -31,10 +31,10 @@ abstract public class ImageCreator {
 				    img.setRGB(x, y, rgb);
 				}
 			}
-			File outputFile = new File(imgName + ".jpg");
-			System.out.println("Trying to save image '" + imgName + ".jpg'");
+			File outputFile = new File(imgName);
+			System.out.println("Trying to save image '" + imgName + "'");
 			ImageIO.write(img, "jpg", outputFile);
-			System.out.println("Image '" + imgName + ".jpg' saved");
+			System.out.println("Image '" + imgName + "' saved");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
