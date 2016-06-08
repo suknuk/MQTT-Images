@@ -20,7 +20,6 @@ public class CommandLineValuesAssertTests {
 	
 	MainCoffeeClass mcc;
 	
-	
 	@Test
 	public void testAssertNoArgs(){
 		System.out.println();
@@ -36,6 +35,7 @@ public class CommandLineValuesAssertTests {
 			assertEquals(320,myFields[8].get(mcc));
 			assertEquals(false,myFields[10].get(mcc));
 			assertEquals(false,myFields[11].get(mcc));
+			assertEquals(false,myFields[14].get(mcc));
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.toString());
 		} catch (IllegalAccessException e) {
@@ -58,6 +58,7 @@ public class CommandLineValuesAssertTests {
 			assertEquals(320,myFields[8].get(mcc));
 			assertEquals(false,myFields[10].get(mcc));
 			assertEquals(false,myFields[11].get(mcc));	
+			assertEquals(false,myFields[14].get(mcc));
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.toString());
 		} catch (IllegalAccessException e) {
@@ -80,6 +81,7 @@ public class CommandLineValuesAssertTests {
 			assertEquals(320,myFields[8].get(mcc));
 			assertEquals(false,myFields[10].get(mcc));
 			assertEquals(false,myFields[11].get(mcc));	
+			assertEquals(false,myFields[14].get(mcc));
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.toString());
 		} catch (IllegalAccessException e) {
@@ -102,6 +104,99 @@ public class CommandLineValuesAssertTests {
 			assertEquals(400,myFields[8].get(mcc)); //width
 			assertEquals(false,myFields[10].get(mcc));
 			assertEquals(false,myFields[11].get(mcc));
+			assertEquals(false,myFields[14].get(mcc));
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.toString());
+		} catch (IllegalAccessException e) {
+			System.out.println(e.toString());
+		}
+	}
+	
+	@Test
+	public void testAssertArgsTwitterFlag(){
+		System.out.println();
+		System.out.println("entering testAssertArgsTwitterFlag");
+		String [] args = {"-t","-at"};
+		initialiseCoffee(args);
+		//asserting expected values
+		try {
+			assertEquals("localhost",myFields[2].get(mcc));
+			assertEquals(1883,myFields[3].get(mcc));
+			assertEquals("tcp://localhost:1883",myFields[4].get(mcc));
+			assertEquals(480,myFields[7].get(mcc)); //height
+			assertEquals(320,myFields[8].get(mcc)); //width
+			assertEquals(true,myFields[10].get(mcc));
+			assertEquals(true,myFields[11].get(mcc));
+			assertEquals(false,myFields[14].get(mcc));
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.toString());
+		} catch (IllegalAccessException e) {
+			System.out.println(e.toString());
+		}
+	}
+
+	@Test
+	public void testAssertArgsExampleFlag(){
+		System.out.println();
+		System.out.println("entering testAssertArgsExampleFlag");
+		String [] args = {"-ex"};
+		initialiseCoffee(args);
+		//asserting expected values
+		try {
+			assertEquals("localhost",myFields[2].get(mcc));
+			assertEquals(1883,myFields[3].get(mcc));
+			assertEquals("tcp://localhost:1883",myFields[4].get(mcc));
+			assertEquals(480,myFields[7].get(mcc)); //height
+			assertEquals(320,myFields[8].get(mcc)); //width
+			assertEquals(false,myFields[10].get(mcc));
+			assertEquals(false,myFields[11].get(mcc));
+			assertEquals(true,myFields[14].get(mcc));
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.toString());
+		} catch (IllegalAccessException e) {
+			System.out.println(e.toString());
+		}
+	}
+	
+	@Test
+	public void testAssertArgsComplexInput1(){
+		System.out.println();
+		System.out.println("entering testAssertArgsComplexInput1");
+		String [] args = {"--ip","192.0.0.1","--port","1880","-height","512","-width","512","-t"};
+		initialiseCoffee(args);
+		//asserting expected values
+		try {
+			assertEquals("192.0.0.1",myFields[2].get(mcc));
+			assertEquals(1880,myFields[3].get(mcc));
+			assertEquals("tcp://192.0.0.1:1880",myFields[4].get(mcc));
+			assertEquals(512,myFields[7].get(mcc));
+			assertEquals(512,myFields[8].get(mcc));
+			assertEquals(true,myFields[10].get(mcc));
+			assertEquals(false,myFields[11].get(mcc));	
+			assertEquals(false,myFields[14].get(mcc));
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.toString());
+		} catch (IllegalAccessException e) {
+			System.out.println(e.toString());
+		}
+	}
+	
+	@Test
+	public void testAssertArgsComplexInput2(){
+		System.out.println();
+		System.out.println("entering testAssertArgsComplexInput1");
+		String [] args = {"--ip","192.0.0.1","--port","1883","-t","-ex"};
+		initialiseCoffee(args);
+		//asserting expected values
+		try {
+			assertEquals("192.0.0.1",myFields[2].get(mcc));
+			assertEquals(1883,myFields[3].get(mcc));
+			assertEquals("tcp://192.0.0.1:1883",myFields[4].get(mcc));
+			assertEquals(480,myFields[7].get(mcc));
+			assertEquals(320,myFields[8].get(mcc));
+			assertEquals(true,myFields[10].get(mcc));
+			assertEquals(false,myFields[11].get(mcc));	
+			assertEquals(true,myFields[14].get(mcc));
 		} catch (IllegalArgumentException e) {
 			System.out.println(e.toString());
 		} catch (IllegalAccessException e) {
