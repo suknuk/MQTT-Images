@@ -22,6 +22,8 @@ public class SocialMedia {
 	private static String OAuthAccessToken = null;
 	private static String OAuthAccessTokenSecret = null;
 	
+	private static String TwitterPropPath = "resources/twitter.properties";
+	
 	InputStream inputStream;
 	
 	boolean instantised = false;
@@ -52,8 +54,6 @@ public class SocialMedia {
 		}
 		setupTwitter();
 		
-		System.out.println(OAuthConsumerKey);
-		
 		//String tMessage="Free coffee for this smiling person!";
 		File file = new File(imgPath);
 		
@@ -82,15 +82,12 @@ public class SocialMedia {
 	public void readTwitterProperties() throws IOException{
 		try{
 			Properties prop = new Properties();
-			//String propFileName = "twitter.properties";
-			//inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
-			String propFileName = "resources/twitter.properties";
-			inputStream = new FileInputStream(propFileName);
+			inputStream = new FileInputStream(TwitterPropPath);
 			
 			if (inputStream != null) {
 				prop.load(inputStream);
 			} else {
-				throw new FileNotFoundException("Property file '" + propFileName + "' not found in the classpath");
+				throw new FileNotFoundException("Property file '" + TwitterPropPath + "' not found in the classpath");
 			}
 			
 			//get property values
