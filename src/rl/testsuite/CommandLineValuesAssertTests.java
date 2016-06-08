@@ -13,7 +13,7 @@ import rl.cafesourire.CommandLineValues;
 import rl.cafesourire.MainCoffeeClass;
 import rl.cafesourire.SocialMedia;
 
-public class ComandLineValuesAssertTests {
+public class CommandLineValuesAssertTests {
 	MainCoffeeClassHack newHacker = MainCoffeeClassHack.getHackInstance();
 	Method [] myMethods = newHacker.getAllMethods();
 	Field [] myFields = newHacker.getAllFields();

@@ -7,7 +7,7 @@ import org.junit.runners.Suite;
 //JUnit Suite Test
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
-	ComandLineValuesAssertTests.class
+	CommandLineValuesAssertTests.class
 })
 
 public class JUnitTestSuite {

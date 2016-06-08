@@ -136,7 +136,7 @@ public class MainCoffeeClass implements MqttCallback{
 	//return date in a useful string format
 	public String getWritableDate(){
 		Date now = new Date();
-		SimpleDateFormat dateFormatter = new SimpleDateFormat("y-M-d_hh:mm");
+		SimpleDateFormat dateFormatter = new SimpleDateFormat("y-M-d_hh:mm_" + System.currentTimeMillis());
 		String usefulDate = dateFormatter.format(now);
 		return usefulDate;
 	}
