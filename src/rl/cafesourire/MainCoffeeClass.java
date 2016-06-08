@@ -39,8 +39,8 @@ public class MainCoffeeClass implements MqttCallback{
 	private static String mqtt_subscribed_topic = "sourire";
 	
 	//measurements of the incoming pictures
-	private static int height = 512;
-	private static int width = 512;
+	private static int height = 480;
+	private static int width = 320;
 	
 	//private static Twitter twitter;
 	private static SocialMedia socialMedia;
@@ -61,7 +61,7 @@ public class MainCoffeeClass implements MqttCallback{
 		mcc.setUpBypassList();
 		//handling arguments
 		CommandLineValues clv = new CommandLineValues(args);
-		clv.parse(bypass);
+		clv.parse(MainCoffeeClass.bypass);
 		mcc.retrieveBypassList();
 		
 		System.out.println(mqtt_server_ip);
@@ -108,6 +108,7 @@ public class MainCoffeeClass implements MqttCallback{
 		 */
 		mqtt_server_ip = (String) bypass.get(0);
 		mqtt_server_port = (int) bypass.get(1);
+		mqtt_broker = "tcp://" + mqtt_server_ip + ":" + mqtt_server_port;
 		height = (int) bypass.get(2);
 		width = (int) bypass.get(3);
 		activeTwitter = (boolean) bypass.get(4);

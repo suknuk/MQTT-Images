@@ -2,15 +2,14 @@
 package rl.testsuite;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import rl.cafesourire.MainCoffeeClass;
 
-//this class is used to access the private fields of the class
+//this class is used to access the private fields of the MainCoffeeClass class
 public class MainCoffeeClassHack {
 	private static MainCoffeeClassHack instance = null;
-	private static MainCoffeeClass coffeInstance = null;
+	private static MainCoffeeClass coffeeInstance = null;
 	
 	private static Class<?> secretClass;
 	static Method methods[];
@@ -18,18 +17,26 @@ public class MainCoffeeClassHack {
 	
 	protected MainCoffeeClassHack(){}
 	
-	public static MainCoffeeClassHack getInstance(){
+	public static MainCoffeeClassHack getHackInstance(){
 		if (instance == null){
 			instance = new MainCoffeeClassHack();
-			coffeInstance = new MainCoffeeClass();
+			coffeeInstance = new MainCoffeeClass();
 			initiateClass();
 		}
 		return instance;
 	}
 	
+	public static MainCoffeeClass getCoffeeInstance(){
+		if (instance == null){
+			instance = getHackInstance();
+		}
+		coffeeInstance = new MainCoffeeClass();
+		return coffeeInstance;
+	}
+	
 	//getting all methods and fields and set them public
 	private static void initiateClass(){
-		secretClass = coffeInstance.getClass();
+		secretClass = coffeeInstance.getClass();
 		methods = secretClass.getDeclaredMethods();
 		for (Method method : methods) {
 			method.setAccessible(true);
@@ -40,9 +47,9 @@ public class MainCoffeeClassHack {
 		}
 	}
 
-	/*
+	
 	public static void main(String[] args) {
-		MainCoffeeClassHack newHacker = MainCoffeeClassHack.getInstance();
+		MainCoffeeClassHack newHacker = MainCoffeeClassHack.getHackInstance();
 		Method [] myMethods = getAllMethods();
 		Field [] myFields = getAllFields();
 		try {
@@ -56,7 +63,8 @@ public class MainCoffeeClassHack {
 		} catch (Exception e){
 			System.out.println(e.toString());
 		}
-	}*/
+		System.out.println(myFields[4].getName());
+	}
 	
 	
 	public static Method[] getAllMethods(){

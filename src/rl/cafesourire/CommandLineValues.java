@@ -76,15 +76,13 @@ public class CommandLineValues {
 				mqtt_server_ip = cmd.getOptionValue("ip");
 				System.out.println("setting ip to " + mqtt_server_ip);
 				System.out.println("No port given, using default port of " + mqtt_server_port);
-				System.out.println("setting port to " + mqtt_server_port);
 			//no ip but port given -> exit program with notice
 			} else if (!ip && port) {
 				System.out.println("Server port but no ip given. Usable only with a server IP");
 				help();
 			//no ip and no port given -> show help
 			} else if (!ip && !port) {
-				System.out.println("This program needs the address of a MQTT server");
-				help();
+				System.out.println("Using local MQTT server. Change server IP with --ip <arg>");
 			}
 			
 			//width and height are given
@@ -107,9 +105,11 @@ public class CommandLineValues {
 			//twitter flag
 			System.out.println("Using Twitter : " + activeTwitter);
 			
-			//automatically updating on twitter or not
-			System.out.println("Updating status automatically on twitter: " + automaticTwitterUpdates + 
-					". Waiting for MQTT message to update on twitter: " + !automaticTwitterUpdates);
+			if (activeTwitter) {
+				//automatically updating on twitter or not
+				System.out.println("Updating status automatically on twitter: " + automaticTwitterUpdates + 
+						". Waiting for MQTT message to update on twitter: " + !automaticTwitterUpdates);
+			}
 			
 			if (sendExampleImage) {
 				System.out.println("exampleImage flag set to True. This will send one example image "
