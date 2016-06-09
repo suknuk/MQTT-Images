@@ -3,7 +3,6 @@ package rl.testsuite;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Objects;
 
 import rl.cafesourire.MainCoffeeClass;
 
@@ -50,6 +49,7 @@ public class MainCoffeeClassHack {
 
 	
 	public static void main(String[] args) {
+		@SuppressWarnings("unused")
 		MainCoffeeClassHack newHacker = MainCoffeeClassHack.getHackInstance();
 		Method [] myMethods = getAllMethods();
 		Field [] myFields = getAllFields();

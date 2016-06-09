@@ -11,11 +11,12 @@ import org.junit.Test;
 
 import rl.cafesourire.CommandLineValues;
 import rl.cafesourire.MainCoffeeClass;
-import rl.cafesourire.SocialMedia;
 
 public class CommandLineValuesAssertTests {
 	MainCoffeeClassHack newHacker = MainCoffeeClassHack.getHackInstance();
+	@SuppressWarnings("static-access")
 	Method [] myMethods = newHacker.getAllMethods();
+	@SuppressWarnings("static-access")
 	Field [] myFields = newHacker.getAllFields();
 	
 	MainCoffeeClass mcc;
@@ -215,6 +216,7 @@ public class CommandLineValuesAssertTests {
 		try {
 			//accessing the bypassing list
 			//knowing: myField[13] = ArrayList<Object> bypass
+			@SuppressWarnings("unchecked")
 			ArrayList<Object> bypass = (ArrayList<Object>) myFields[13].get(mcc);
 			clv.parse(bypass);
 			myFields[13].set(mcc, bypass);

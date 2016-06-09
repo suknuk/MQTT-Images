@@ -1,35 +1,58 @@
 package rl.testsuite;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.Field;
 
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import rl.cafesourire.SocialMedia;
+import rl.cafesourire.TwitterClass;
 
 public class SocialMediaTests {
-	SocialMedia sm;
+	TwitterClass tc;
+	
 	@Test
 	public void readValidTwitterProperties(){
-		sm = SocialMedia.GetSocialMedia();
+		tc = new TwitterClass();
 		try {
-			sm.readTwitterProperties();
+			Class<?> c = tc.getClass();
+			Field propPath = c.getDeclaredField("TwitterPropPath");
+			propPath.setAccessible(true);
+			propPath.set(tc,"resources/twitter.properties/");
+			tc.readTwitterProperties();
 		} catch (IOException e) {
 			System.out.println(e.toString());
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
-	@Test(expected = FileNotFoundException.class)
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
+	
+	@Test
 	public void readNonValidTwitterProperties(){
-		sm = SocialMedia.GetSocialMedia();
+		tc = new TwitterClass();
 		//making the path public
 		try {
-			Class<?> c = sm.getClass();
+			Class<?> c = tc.getClass();
 			Field propPath = c.getDeclaredField("TwitterPropPath");
 			propPath.setAccessible(true);
-			propPath.set(sm,"nonvalid/path");
-			sm.readTwitterProperties();
+			propPath.set(tc,"nonvalid/path");
+			thrown.expect(NullPointerException.class);
+			tc.readTwitterProperties();
 		} catch (NoSuchFieldException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
