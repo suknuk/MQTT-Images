@@ -8,7 +8,8 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 @Suite.SuiteClasses({ 
 	CommandLineValuesAssertTests.class,
-	TwitterTests.class
+	TwitterTests.class,
+	FacebookTests.class
 })
 
 public class JUnitTestSuite {

@@ -7,21 +7,20 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import rl.cafesourire.SocialMedia;
-import rl.cafesourire.TwitterClass;
+import rl.cafesourire.FacebookClass;
 
-public class SocialMediaTests {
-	TwitterClass tc;
+public class FacebookTests {
+	FacebookClass fc;
 	
 	@Test
 	public void readValidTwitterProperties(){
-		tc = new TwitterClass();
+		fc = new FacebookClass();
 		try {
-			Class<?> c = tc.getClass();
-			Field propPath = c.getDeclaredField("TwitterPropPath");
+			Class<?> c = fc.getClass();
+			Field propPath = c.getDeclaredField("facebookPropPath");
 			propPath.setAccessible(true);
-			propPath.set(tc,"resources/twitter.properties/");
-			tc.readTwitterProperties();
+			propPath.set(fc,"resources/facebook.properties/");
+			fc.readFacebookProperties();
 		} catch (IOException e) {
 			System.out.println(e.toString());
 		} catch (NoSuchFieldException e) {
@@ -44,15 +43,15 @@ public class SocialMediaTests {
 	
 	@Test
 	public void readNonValidTwitterProperties(){
-		tc = new TwitterClass();
+		fc = new FacebookClass();
 		//making the path public
 		try {
-			Class<?> c = tc.getClass();
-			Field propPath = c.getDeclaredField("TwitterPropPath");
+			Class<?> c = fc.getClass();
+			Field propPath = c.getDeclaredField("facebookPropPath");
 			propPath.setAccessible(true);
-			propPath.set(tc,"nonvalid/path");
+			propPath.set(fc,"nonvalid/path");
 			thrown.expect(NullPointerException.class);
-			tc.readTwitterProperties();
+			fc.readFacebookProperties();
 		} catch (NoSuchFieldException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
