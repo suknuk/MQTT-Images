@@ -5,6 +5,7 @@ public class SocialMedia {
 	private static SocialMedia instance = null;
 	
 	private TwitterClass tc;
+	private FacebookClass fc;
 	
 	protected SocialMedia(){
 		
@@ -20,5 +21,9 @@ public class SocialMedia {
 	//Twitter update with message/photo
 	public void sendTwitterImage(String imgPath, String tMessage){
 		tc.sendTwitterImage(imgPath, tMessage);
+	}
+	
+	public void sendFacebookImage(String imgPath){
+		fc.sendFacebookImage(imgPath);
 	}
 }
