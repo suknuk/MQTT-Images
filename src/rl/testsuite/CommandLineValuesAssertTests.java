@@ -117,7 +117,7 @@ public class CommandLineValuesAssertTests {
 	public void testAssertArgsTwitterFlag(){
 		System.out.println();
 		System.out.println("entering testAssertArgsTwitterFlag");
-		String [] args = {"-t","-at"};
+		String [] args = {"-t","-as"};
 		initialiseCoffee(args);
 		//asserting expected values
 		try {

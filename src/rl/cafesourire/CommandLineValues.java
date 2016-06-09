@@ -24,16 +24,20 @@ public class CommandLineValues {
 		options.addOption("p", "port",true, "Set MQTT server port");
 		options.addOption("height",true, "Set height of the receiving images");
 		options.addOption("width",true, "Set width of the receiving images");
-		options.addOption("t", "twitter", false, "Sets flag to use/not use social media");
-		options.addOption("at","automaticTwitter",false,"Sets flag for automatic status updates "
-				+ "on Twitter, or to wait for a user command");
+		options.addOption("t", "twitter", false, "Sets flag to use/not use twitter");
+		options.addOption("f","facebook",true,"Sets flag to use/not use facebook");
+		options.addOption("as","automaticSocialMedia",false,"Sets flag for automatic status updates "
+				+ "on activated Social Media, or to wait for a user command");
 		options.addOption("ex", "exampleImage", false, "Sets the flag for one sample image to be "
 				+ "send to see if the program is working");
 
 	}
 
-	//public void parse(String mqtt_server_ip, int mqtt_server_port, int img_height, int img_width, 
-		//	boolean activeTwitter, boolean automaticTwitterUpdates) {
+	/* Order of variables in the bypass list
+	 * (String mqtt_server_ip, int mqtt_server_port, int img_height, int img_width, 
+	 * boolean activeTwitter, boolean automaticSocialMediaUpdates, boolean sendExampleImage,
+	 * boolean activeFacebook
+	 */
 	public void parse(ArrayList<Object> bypass){
 		
 		//making references
@@ -42,8 +46,9 @@ public class CommandLineValues {
 		int img_height = (int) bypass.get(2);
 		int img_width = (int) bypass.get(3);
 		boolean activeTwitter = (boolean) bypass.get(4);
-		boolean automaticTwitterUpdates = (boolean) bypass.get(5);
+		boolean automaticSocialMediaUpdates = (boolean) bypass.get(5);
 		boolean sendExampleImage = (boolean) bypass.get(6);
+		boolean activeFacebook = (boolean) bypass.get(7);
 		
 		CommandLineParser parser = new BasicParser();
 
@@ -57,8 +62,9 @@ public class CommandLineValues {
 			boolean height = cmd.hasOption("height");
 			boolean width = cmd.hasOption("width");
 			activeTwitter = cmd.hasOption("twitter");
-			automaticTwitterUpdates = cmd.hasOption("automaticTwitter");
+			automaticSocialMediaUpdates = cmd.hasOption("automaticSocialMedia");
 			sendExampleImage = cmd.hasOption("exampleImage");
+			activeFacebook = cmd.hasOption("facebook");
 			
 			//help flag
 			if (cmd.hasOption("h")){
@@ -105,10 +111,13 @@ public class CommandLineValues {
 			//twitter flag
 			System.out.println("Using Twitter : " + activeTwitter);
 			
-			if (activeTwitter) {
+			//facebook flag
+			System.out.println("Using Facebook : " + activeFacebook);
+			
+			if (activeTwitter || activeFacebook) {
 				//automatically updating on twitter or not
-				System.out.println("Updating status automatically on twitter: " + automaticTwitterUpdates + 
-						". Waiting for MQTT message to update on twitter: " + !automaticTwitterUpdates);
+				System.out.println("Updating status automatically on Social Media : " + automaticSocialMediaUpdates + 
+						". Waiting for MQTT message to update on Social Media: " + !automaticSocialMediaUpdates);
 			}
 			
 			if (sendExampleImage) {
@@ -122,8 +131,9 @@ public class CommandLineValues {
 			bypass.set(2, img_height);
 			bypass.set(3, img_width);
 			bypass.set(4, activeTwitter);
-			bypass.set(5, automaticTwitterUpdates);
+			bypass.set(5, automaticSocialMediaUpdates);
 			bypass.set(6, sendExampleImage);
+			bypass.set(7, activeFacebook);
 
 		} catch (ParseException e) {
 			System.out.println("Failed to parse comand line properties " + e.toString());

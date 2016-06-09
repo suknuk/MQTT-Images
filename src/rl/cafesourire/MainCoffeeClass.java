@@ -45,7 +45,7 @@ public class MainCoffeeClass implements MqttCallback{
 	//private static Twitter twitter;
 	private static SocialMedia socialMedia;
 	private static boolean activeTwitter = false;
-	private static boolean automaticTwitterUpdates = false;
+	private static boolean automaticSocialMediaUpdates = false;
 	//this variable holds the path of the last received smile
 	//when automaticTwitterUpdates == false,
 	private static String lastReceivedSmile = null;
@@ -55,6 +55,8 @@ public class MainCoffeeClass implements MqttCallback{
 	
 	//usage for example
 	private static boolean sendExampleImage = false;
+	
+	private static boolean activeFacebook = false;
 
 	public static void main(String[] args) {
 		MainCoffeeClass mcc = new MainCoffeeClass();
@@ -98,8 +100,9 @@ public class MainCoffeeClass implements MqttCallback{
 		bypass.add(height);
 		bypass.add(width);
 		bypass.add(activeTwitter);
-		bypass.add(automaticTwitterUpdates);
+		bypass.add(automaticSocialMediaUpdates);
 		bypass.add(sendExampleImage);
+		bypass.add(activeFacebook);
 	}
 	
 	public void retrieveBypassList(){
@@ -112,8 +115,9 @@ public class MainCoffeeClass implements MqttCallback{
 		height = (int) bypass.get(2);
 		width = (int) bypass.get(3);
 		activeTwitter = (boolean) bypass.get(4);
-		automaticTwitterUpdates = (boolean) bypass.get(5);
+		automaticSocialMediaUpdates = (boolean) bypass.get(5);
 		sendExampleImage = (boolean) bypass.get(6);
+		activeFacebook = (boolean) bypass.get(7);
 	}
 	
 	//example of sending a image in a byte file
@@ -222,7 +226,11 @@ public class MainCoffeeClass implements MqttCallback{
 					System.out.println("Raspberry is connected to mqtt");
 				} else if (theMessage.equals("Update to Twitter")){
 					System.out.println("Received command to upload the last received image to Twitter");
-					socialMedia.sendTwitterImage(lastReceivedSmile, "Free coffee for this smiling person!");
+					if (lastReceivedSmile != null) {
+						postOnSocialMedia(lastReceivedSmile);
+					} else {
+						System.out.println("No image received in this session to upload");
+					}
 				}
 			} else {
 				System.out.println("-------------------------------------------------");
@@ -251,11 +259,9 @@ public class MainCoffeeClass implements MqttCallback{
 				ImageCreator.createPictureFromByteFile(imgNameByte, imgName, height, width, BufferedImage.TYPE_INT_BGR);
 				lastReceivedSmile = imgName;
 				
-				System.out.println(activeTwitter + " " + automaticTwitterUpdates);
-				
 				//send the image with a message to twitter, if twitter and automaticTwitterUpdates is set to true 
-				if (activeTwitter && automaticTwitterUpdates) {
-					socialMedia.sendTwitterImage(imgName, "Free coffee for this smiling person!");
+				if (automaticSocialMediaUpdates) {
+					postOnSocialMedia(imgName);
 				}
 			}
 			//received a other message
@@ -264,6 +270,15 @@ public class MainCoffeeClass implements MqttCallback{
 			System.out.println("| Topic:" + topic.toString());
 			System.out.println("| Message: " + theMessage);
 			System.out.println("-------------------------------------------------");
+		}
+	}
+	
+	private void postOnSocialMedia(String imgPath){
+		if (activeFacebook){
+			socialMedia.sendFacebookImage(imgPath);
+		}
+		if (activeTwitter){	
+			socialMedia.sendTwitterImage(imgPath, "Free coffee for this smiling person!");
 		}
 	}
 }
