@@ -69,7 +69,7 @@ public class MainCoffeeClass implements MqttCallback{
 		System.out.println(mqtt_server_ip);
 
 		mcc.setupMQTTClient();
-		if (activeTwitter) {
+		if (activeTwitter || activeFacebook) {
 			MainCoffeeClass.socialMedia = SocialMedia.GetSocialMedia();
 		}
 		
@@ -81,7 +81,8 @@ public class MainCoffeeClass implements MqttCallback{
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-
+			
+			
 			mcc.sendExample(mcc);
 		}
 	}
@@ -224,10 +225,11 @@ public class MainCoffeeClass implements MqttCallback{
 			if (theMessage.length() < 100){
 				if (theMessage.equals("connected")){
 					System.out.println("Raspberry is connected to mqtt");
-				} else if (theMessage.equals("Update to Twitter")){
+				} else if (theMessage.equals("Update to Social Media")){
 					System.out.println("Received command to upload the last received image to Twitter");
 					if (lastReceivedSmile != null) {
 						postOnSocialMedia(lastReceivedSmile);
+						lastReceivedSmile = null; //resetting
 					} else {
 						System.out.println("No image received in this session to upload");
 					}
@@ -274,9 +276,12 @@ public class MainCoffeeClass implements MqttCallback{
 	}
 	
 	private void postOnSocialMedia(String imgPath){
+		System.out.println(1);
 		if (activeFacebook){
+			System.out.println(2);
 			socialMedia.sendFacebookImage(imgPath);
 		}
+		System.out.println(3);
 		if (activeTwitter){	
 			socialMedia.sendTwitterImage(imgPath, "Free coffee for this smiling person!");
 		}

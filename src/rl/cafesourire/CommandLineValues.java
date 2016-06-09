@@ -25,7 +25,7 @@ public class CommandLineValues {
 		options.addOption("height",true, "Set height of the receiving images");
 		options.addOption("width",true, "Set width of the receiving images");
 		options.addOption("t", "twitter", false, "Sets flag to use/not use twitter");
-		options.addOption("f","facebook",true,"Sets flag to use/not use facebook");
+		options.addOption("f","facebook",false,"Sets flag to use/not use facebook");
 		options.addOption("as","automaticSocialMedia",false,"Sets flag for automatic status updates "
 				+ "on activated Social Media, or to wait for a user command");
 		options.addOption("ex", "exampleImage", false, "Sets the flag for one sample image to be "

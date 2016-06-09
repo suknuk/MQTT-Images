@@ -4,8 +4,8 @@ public class SocialMedia {
 	
 	private static SocialMedia instance = null;
 	
-	private TwitterClass tc;
-	private FacebookClass fc;
+	private static TwitterClass tc;
+	private static FacebookClass fc;
 	
 	protected SocialMedia(){
 		
@@ -14,6 +14,8 @@ public class SocialMedia {
 	public static SocialMedia GetSocialMedia(){
 		if (instance == null){
 			instance = new SocialMedia();
+			tc = new TwitterClass();
+			fc = new FacebookClass();
 		}
 		return instance;
 	}
