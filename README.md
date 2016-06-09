@@ -1,6 +1,10 @@
 # MQTT-Images
 This program allows the reception of base64 encoded images via the MQTT protocol and is able to send the received images to Social Media sites such as Twitter and Facebook.
 
+This program was part of a university module 'Project de spécialité' in the FabLab domain.
+[Machine à café sourire](http://fablab.ensimag.fr/index.php/Machine_%C3%A0_caf%C3%A9_%22sourire%22_:_Machine_connect%C3%A9_qui_offre_des_caf%C3%A9s_aux_personnes_souriantes)
+
+
 ## Running the program
 **NOTE:** The program requires a running mqtt server to receive messages
 ```
@@ -17,22 +21,26 @@ This program allows the reception of base64 encoded images via the MQTT protocol
 ```
 
 ### Default values ###
-`-ip`     localhost
-`-port`   1883. This is also the defaut port for the MQTT messaging protocol.
-`-height` 480
-`-width`  320
-`-twitter`, `-facebook`, `automaticSocialMedia` are by default set to false
-`-exampleImage` false
+* `-ip`     localhost
+* `-port`   1883. This is also the defaut port for the MQTT messaging protocol.
+* `-height` 480
+* `-width`  320
+* `-twitter` false
+* `-facebook` false
+* `automaticSocialMedia`false
+* `-exampleImage` false
 
+### Received images ###
+Both the received bit file and the transformed image are being stored in the `images/` folder. Images are being named by the current time.
 
 ### Example usage ###
-Testing the program with an example image to the local ip. Assumes local MQTT (ex. mosquitto) is running. To verify the correctness of the program, an image should appear in `images/` folder.
-```
+Testing the program with an example image to the local ip. The example image is stored in the main folder as `imagedata`. The file represents the known `Lenna` picture in a 512x512 resolution, transformed into base64. Assumes local MQTT server (ex. mosquitto) is running. To verify the correctness of the program, an image should appear in `images/` folder.
+```sh
   java -jar ImagesMQTT.jar -ip 127.0.0.1 -port 1883 -height 512 -width 512 -ex
 ```
 
 Assuming non-local MQTT server with automatic Twitter and Facebook updates, but default image resolution.
-```
+```sh
   java -jar ImagesMQTT.jar -ip 192.168.2.24 -t -f -as
 ```
 
@@ -57,5 +65,9 @@ If the `automaticSocialMedia` flag is set to false, it is up to the users to sen
   -facebook4j
 ```
 
+## Social Media authentification
+To use this programs Social Media capabilities, it is necessary to copy the relevant OAuth data into the `resources/twitter.properties` and `resources/facebook.properties` files.
+
+
 ##Tests
-All practical testing is done via JUnit with a test suite.
+All unit testing is done via JUnit together with a test suite. Due to the nature of this program - very networking dependent - the main functionallities are not being tested with the unit tests.
